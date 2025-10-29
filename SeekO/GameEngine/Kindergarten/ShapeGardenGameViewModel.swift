@@ -1,4 +1,5 @@
 import Foundation
+import Combine
 
 final class ShapeGardenGameViewModel: ObservableObject {
     struct ShapeCard: Identifiable, Equatable {
