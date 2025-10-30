@@ -58,12 +58,21 @@ struct LetterGardenGameView: View {
     }
 
     private var promptCard: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text(viewModel.promptText)
-                .font(.title3.bold())
-            Text(viewModel.helperText)
-                .font(.callout)
-                .foregroundColor(.secondary)
+        VStack(alignment: .leading, spacing: 16) {
+            VStack(alignment: .leading, spacing: 8) {
+                Text(viewModel.promptText)
+                    .font(.title3.bold())
+                Text(viewModel.helperText)
+                    .font(.callout)
+                    .foregroundColor(.secondary)
+            }
+
+            Button(action: viewModel.replayPromptAudio) {
+                Label("Hear it again", systemImage: "speaker.wave.2.fill")
+                    .font(.subheadline.weight(.semibold))
+            }
+            .tint(Color(hex: "9C27B0"))
+            .buttonStyle(.bordered)
         }
         .padding()
         .frame(maxWidth: .infinity, alignment: .leading)
