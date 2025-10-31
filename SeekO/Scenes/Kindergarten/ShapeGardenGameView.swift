@@ -9,23 +9,28 @@ struct ShapeGardenGameView: View {
     ]
 
     var body: some View {
-        VStack(spacing: 20) {
-            header
+        ZStack {
+            backgroundGradient
+                .ignoresSafeArea()
+                .overlay(TreetopGlowOverlay())
 
-            if viewModel.isComplete {
-                completionCard
-            } else {
-                promptCard
-                shapeGrid
-                Spacer()
-            }
+            VStack(spacing: 20) {
+                header
 
-            if let feedback = viewModel.feedback {
-                FeedbackBanner(feedback: feedback)
+                if viewModel.isComplete {
+                    completionCard
+                } else {
+                    promptCard
+                    shapeGrid
+                    Spacer()
+                }
+
+                if let feedback = viewModel.feedback {
+                    FeedbackBanner(feedback: feedback)
+                }
             }
+            .padding()
         }
-        .padding()
-        .background(Color(uiColor: .systemGroupedBackground).ignoresSafeArea())
         .animation(.easeInOut, value: viewModel.feedback?.message)
         .animation(.easeInOut, value: viewModel.isComplete)
     }
@@ -34,14 +39,15 @@ struct ShapeGardenGameView: View {
         VStack(alignment: .leading, spacing: 8) {
             ProgressView(value: viewModel.progress)
                 .progressViewStyle(.linear)
-                .tint(Color(hex: "219EBC"))
+                .tint(Color(hex: "34D399"))
             HStack {
-                VStack(alignment: .leading) {
+                VStack(alignment: .leading, spacing: 4) {
                     Text("Shape Garden")
                         .font(.title2.bold())
+                        .foregroundColor(Color(hex: "ECFCCB"))
                     Text("Round \(viewModel.roundNumber) of 6")
                         .font(.callout)
-                        .foregroundColor(.secondary)
+                        .foregroundColor(Color(hex: "A7F3D0"))
                 }
 
                 Spacer()
@@ -50,9 +56,17 @@ struct ShapeGardenGameView: View {
                     .font(.headline)
                     .padding(.horizontal, 12)
                     .padding(.vertical, 6)
-                    .background(Capsule().fill(Color(hex: "FFB703").opacity(0.2)))
+                    .background(Capsule().fill(Color.white.opacity(0.15)))
+                    .foregroundColor(Color(hex: "FDE68A"))
+                    .overlay(
+                        Image(systemName: "leaf.circle.fill")
+                            .font(.caption)
+                            .foregroundColor(Color(hex: "BBF7D0"))
+                            .offset(x: 18, y: -18)
+                    )
             }
         }
+        .padding(.horizontal, 4)
     }
 
     private var promptCard: some View {
