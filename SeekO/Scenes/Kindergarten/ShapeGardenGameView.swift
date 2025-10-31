@@ -73,14 +73,28 @@ struct ShapeGardenGameView: View {
         VStack(alignment: .leading, spacing: 12) {
             Text(viewModel.promptText)
                 .font(.title3.bold())
+                .foregroundColor(Color(hex: "064E3B"))
             Text("Listen carefully and tap the matching shape to grow the garden.")
                 .font(.callout)
-                .foregroundColor(.secondary)
+                .foregroundColor(Color(hex: "115E59"))
         }
         .padding()
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(RoundedRectangle(cornerRadius: 24).fill(Color.white))
-        .shadow(color: Color.black.opacity(0.08), radius: 12, x: 0, y: 6)
+        .background(
+            RoundedRectangle(cornerRadius: 28)
+                .fill(
+                    LinearGradient(
+                        colors: [Color(hex: "F1F5F9"), Color(hex: "ECFCCB")],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+                )
+                .overlay(
+                    RoundedRectangle(cornerRadius: 28)
+                        .stroke(Color(hex: "34D399").opacity(0.35), lineWidth: 1.5)
+                )
+        )
+        .shadow(color: Color.black.opacity(0.12), radius: 16, x: 0, y: 10)
     }
 
     private var shapeGrid: some View {
@@ -100,26 +114,43 @@ struct ShapeGardenGameView: View {
         VStack(spacing: 16) {
             Image(systemName: "sparkles")
                 .font(.system(size: 48))
-                .foregroundColor(Color(hex: "FFB703"))
+                .foregroundColor(Color(hex: "34D399"))
             Text("You helped the garden bloom!")
                 .font(.title2.bold())
+                .foregroundColor(Color(hex: "064E3B"))
             Text("You matched \(viewModel.score) shapes. Fantastic listening and matching skills!")
                 .font(.body)
                 .multilineTextAlignment(.center)
+                .foregroundColor(Color(hex: "0F172A"))
 
             Button(action: viewModel.startGame) {
                 Label("Play again", systemImage: "arrow.clockwise")
                     .font(.headline)
                     .padding(.horizontal, 20)
                     .padding(.vertical, 12)
-                    .background(Capsule().fill(Color(hex: "219EBC")))
-                    .foregroundColor(.white)
+                    .background(Capsule().fill(Color(hex: "F59E0B")))
+                    .foregroundColor(Color(hex: "0F172A"))
             }
         }
         .padding(32)
         .frame(maxWidth: .infinity)
-        .background(RoundedRectangle(cornerRadius: 28).fill(Color.white))
+        .background(
+            RoundedRectangle(cornerRadius: 28)
+                .fill(Color.white.opacity(0.95))
+        )
         .shadow(color: Color.black.opacity(0.12), radius: 18, x: 0, y: 8)
+    }
+
+    private var backgroundGradient: LinearGradient {
+        LinearGradient(
+            colors: [
+                Color(hex: "022C22"),
+                Color(hex: "054A29"),
+                Color(hex: "0B5F30")
+            ],
+            startPoint: .top,
+            endPoint: .bottom
+        )
     }
 }
 
@@ -138,8 +169,15 @@ private struct ShapeTileCard: View {
         }
         .padding()
         .frame(maxWidth: .infinity)
-        .background(RoundedRectangle(cornerRadius: 24).fill(Color.white))
-        .shadow(color: Color.black.opacity(0.08), radius: 10, x: 0, y: 4)
+        .background(
+            RoundedRectangle(cornerRadius: 24)
+                .fill(Color.white.opacity(0.96))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 24)
+                        .stroke(Color(hex: card.colorHex).opacity(0.25), lineWidth: 1)
+                )
+        )
+        .shadow(color: Color.black.opacity(0.12), radius: 12, x: 0, y: 6)
     }
 }
 
@@ -158,7 +196,7 @@ private struct FeedbackBanner: View {
         .frame(maxWidth: .infinity)
         .background(
             RoundedRectangle(cornerRadius: 18)
-                .fill((feedback.isPositive ? Color(hex: "8AC926") : Color(hex: "FB8500")))
+                .fill((feedback.isPositive ? Color(hex: "22C55E") : Color(hex: "F97316")))
         )
         .shadow(color: Color.black.opacity(0.08), radius: 8, x: 0, y: 4)
     }
@@ -173,3 +211,25 @@ struct ShapeGardenGameView_Previews: PreviewProvider {
     }
 }
 #endif
+
+private struct TreetopGlowOverlay: View {
+    var body: some View {
+        ZStack {
+            Circle()
+                .fill(Color(hex: "FDE68A").opacity(0.16))
+                .frame(width: 240)
+                .blur(radius: 90)
+                .offset(x: -120, y: -240)
+            Circle()
+                .fill(Color(hex: "34D399").opacity(0.22))
+                .frame(width: 260)
+                .blur(radius: 100)
+                .offset(x: 140, y: -180)
+            Circle()
+                .fill(Color(hex: "F97316").opacity(0.15))
+                .frame(width: 320)
+                .blur(radius: 120)
+                .offset(x: 90, y: 260)
+        }
+    }
+}

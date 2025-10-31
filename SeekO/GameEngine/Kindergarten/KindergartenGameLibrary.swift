@@ -14,7 +14,7 @@ struct KindergartenGameLibrary {
             subtitle: "Match letters with their sounds to help the garden sing.",
             estimatedMinutes: 5,
             iconSystemName: "textformat.abc",
-            theme: .init(primaryHex: "9C27B0", secondaryHex: "F48FB1", accentHex: "8BC34A"),
+            theme: .init(primaryHex: "1C7C54", secondaryHex: "2FB573", accentHex: "FACC15"),
             destinationBuilder: {
                 let viewModel = LetterGardenGameViewModel()
                 return AnyView(LetterGardenGameView(viewModel: viewModel))
@@ -31,7 +31,7 @@ struct KindergartenGameLibrary {
             subtitle: "Match shapes to help the garden bloom with color.",
             estimatedMinutes: 5,
             iconSystemName: "leaf.fill",
-            theme: .init(primaryHex: "FFB703", secondaryHex: "FB8500", accentHex: "219EBC"),
+            theme: .init(primaryHex: "0A5E33", secondaryHex: "16A34A", accentHex: "FDE68A"),
             destinationBuilder: {
                 let viewModel = ShapeGardenGameViewModel()
                 return AnyView(ShapeGardenGameView(viewModel: viewModel))

@@ -43,6 +43,25 @@ final class LetterGardenGameViewModel: ObservableObject {
     private var currentPromptLetter: Letter?
 
     private let speechSynthesizer = AVSpeechSynthesizer()
+    private let narratorVoice: AVSpeechSynthesisVoice? = {
+        let preferredVoices = [
+            "com.apple.ttsbundle.Samantha-compact",
+            "com.apple.ttsbundle.Ava-compact",
+            "com.apple.ttsbundle.Karen-compact"
+        ]
+        for identifier in preferredVoices {
+            if let match = AVSpeechSynthesisVoice(identifier: identifier) {
+                return match
+            }
+        }
+        if let australian = AVSpeechSynthesisVoice(language: "en-AU") {
+            return australian
+        }
+        if let us = AVSpeechSynthesisVoice(language: "en-US") {
+            return us
+        }
+        return nil
+    }()
 
     init() {
         startGame()
@@ -140,8 +159,10 @@ final class LetterGardenGameViewModel: ObservableObject {
 
     private func speak(text: String) {
         let utterance = AVSpeechUtterance(string: text)
-        utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
-        utterance.rate = AVSpeechUtteranceDefaultSpeechRate * 0.9
+        utterance.voice = narratorVoice
+        utterance.rate = 0.46
+        utterance.pitchMultiplier = 1.08
+        utterance.postUtteranceDelay = 0.15
         DispatchQueue.main.async {
             self.speechSynthesizer.stopSpeaking(at: .immediate)
             self.speechSynthesizer.speak(utterance)
