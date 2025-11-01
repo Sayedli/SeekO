@@ -92,6 +92,7 @@ struct KindergartenHubView: View {
                         .blur(radius: 0.5)
                         .padding(20)
                 )
+                .overlay(vineOverlay)
                 .shadow(color: Color.black.opacity(0.2), radius: 24, x: 0, y: 18)
 
             VStack(alignment: .leading, spacing: 16) {
@@ -119,6 +120,25 @@ struct KindergartenHubView: View {
         }
     }
 
+    private var vineOverlay: some View {
+        ZStack {
+            ForEach(0..<6) { index in
+                Rectangle()
+                    .fill(Color.white.opacity(0.08))
+                    .frame(width: 2, height: 70)
+                    .rotationEffect(.degrees(Double(index) * 8 - 20))
+                    .offset(x: CGFloat(index) * 22 - 40, y: -60)
+            }
+
+            Image(systemName: "bird.fill")
+                .font(.system(size: 42))
+                .foregroundColor(Color(hex: "FACC15").opacity(0.85))
+                .rotationEffect(.degrees(-8))
+                .offset(x: 96, y: -60)
+        }
+        .padding(30)
+    }
+
     private var junglePrompt: some View {
         HStack(alignment: .center, spacing: 16) {
             VStack(alignment: .leading, spacing: 6) {
@@ -132,14 +152,7 @@ struct KindergartenHubView: View {
 
             Spacer()
 
-            Image(systemName: "tortoise.fill")
-                .font(.system(size: 34))
-                .foregroundColor(Color(hex: "FDE68A"))
-                .padding(12)
-                .background(
-                    Circle()
-                        .fill(Color.white.opacity(0.15))
-                )
+            JungleGuideBadge()
         }
         .padding(20)
         .background(
@@ -161,7 +174,34 @@ private struct ProgressBadge: View {
         }
         .padding(.horizontal, 12)
         .padding(.vertical, 6)
-        .background(Capsule().fill(Color.blue.opacity(0.15)))
+        .background(Capsule().fill(Color(hex: "14B8A6").opacity(0.2)))
+    }
+}
+
+private struct JungleGuideBadge: View {
+    var body: some View {
+        VStack(spacing: 6) {
+            Image(systemName: "bird.fill")
+                .font(.system(size: 40))
+                .foregroundColor(Color(hex: "FACC15"))
+                .shadow(color: Color.black.opacity(0.22), radius: 6, x: 0, y: 4)
+            Text("Captain Coco")
+                .font(.caption2.weight(.bold))
+                .foregroundColor(Color.white.opacity(0.85))
+            Text("Tap for tips!")
+                .font(.caption2)
+                .foregroundColor(Color.white.opacity(0.6))
+        }
+        .padding(.horizontal, 16)
+        .padding(.vertical, 12)
+        .background(
+            RoundedRectangle(cornerRadius: 20)
+                .fill(Color.white.opacity(0.12))
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: 20)
+                .stroke(Color(hex: "FACC15").opacity(0.35), lineWidth: 1)
+        )
     }
 }
 
