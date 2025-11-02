@@ -34,6 +34,12 @@ struct LetterGardenGameView: View {
         }
         .animation(.easeInOut, value: viewModel.feedback?.message)
         .animation(.easeInOut, value: viewModel.isComplete)
+        .onAppear {
+            viewModel.enableAudioPrompts()
+        }
+        .onDisappear {
+            viewModel.disableAudioPrompts()
+        }
     }
 
     private var header: some View {
