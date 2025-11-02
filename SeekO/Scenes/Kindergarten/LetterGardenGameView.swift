@@ -87,6 +87,27 @@ struct LetterGardenGameView: View {
                     .foregroundColor(Color(hex: "334155"))
             }
 
+            if let clue = viewModel.promptClue {
+                HStack(alignment: .center, spacing: 12) {
+                    Text(clue)
+                        .font(.title3.weight(.semibold))
+                        .foregroundColor(Color(hex: "0F172A"))
+                    Spacer()
+                    Image(systemName: "magnifyingglass")
+                        .font(.title3)
+                        .foregroundColor(Color(hex: "0D9488"))
+                }
+                .padding()
+                .background(
+                    RoundedRectangle(cornerRadius: 22)
+                        .fill(Color.white.opacity(0.85))
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 22)
+                                .stroke(Color(hex: "0D9488").opacity(0.25), lineWidth: 1)
+                        )
+                )
+            }
+
             Button(action: viewModel.replayPromptAudio) {
                 Label("Hear it again", systemImage: "speaker.wave.2.fill")
                     .font(.subheadline.weight(.semibold))
