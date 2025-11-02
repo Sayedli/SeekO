@@ -62,6 +62,7 @@ final class LetterGardenGameViewModel: ObservableObject {
         }
         return nil
     }()
+    private var isAudioEnabled = false
 
     init() {
         startGame()
@@ -128,24 +129,40 @@ final class LetterGardenGameViewModel: ObservableObject {
         currentPromptLetter = correctLetter
 
         if let answer = currentAnswer {
-            promptText = "Find the letter \(answer.letter.uppercase)."
-            helperText = "It says /\(answer.letter.phoneme)/ like in \(answer.letter.keyword)."
+            promptText = "Which letter starts the word \(answer.letter.keyword.capitalized)?"
+            helperText = "Listen for the /\(answer.letter.phoneme)/ sound."
             speakPrompt(for: answer.letter)
         } else {
-            promptText = "Tap the matching letter."
-            helperText = "Listen to the sound and pick the correct letter."
+            promptText = "Tap the letter that matches the sound."
+            helperText = "Listen carefully and choose the best match."
             speak(text: "Tap the matching letter. Listen to the sound and pick the correct letter.")
         }
     }
 
     func replayPromptAudio() {
-        guard let letter = currentPromptLetter else { return }
+        guard isAudioEnabled, let letter = currentPromptLetter else { return }
         speakPrompt(for: letter)
     }
 
+    func enableAudioPrompts() {
+        guard !isAudioEnabled else {
+            replayPromptAudio()
+            return
+        }
+        isAudioEnabled = true
+        replayPromptAudio()
+    }
+
+    func disableAudioPrompts() {
+        isAudioEnabled = false
+        DispatchQueue.main.async {
+            self.speechSynthesizer.stopSpeaking(at: .immediate)
+        }
+    }
+
     private func speakPrompt(for letter: Letter) {
-        let prompt = "Find the letter \(letter.uppercase)."
-        let helper = "It says \(letter.phonemeSpeech) like in \(letter.keyword)."
+        let prompt = "Which letter starts the word \(letter.keyword)?"
+        let helper = "Listen for the \(letter.phonemeSpeech) sound."
         speak(text: "\(prompt) \(helper)")
     }
 
@@ -158,6 +175,7 @@ final class LetterGardenGameViewModel: ObservableObject {
     }
 
     private func speak(text: String) {
+        guard isAudioEnabled else { return }
         let utterance = AVSpeechUtterance(string: text)
         utterance.voice = narratorVoice
         utterance.rate = 0.46
