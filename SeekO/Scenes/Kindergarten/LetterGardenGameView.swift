@@ -183,7 +183,7 @@ private struct LetterTileCard: View {
                     .font(.system(size: 32, weight: .semibold, design: .rounded))
                     .foregroundColor(Color(hex: "0D9488"))
             }
-            Text("“\(card.letter.keyword.capitalized)”")
+            Text("\(card.letter.clueEmoji) \(card.letter.keyword.capitalized)")
                 .font(.callout)
                 .foregroundColor(Color(hex: "4B5563"))
         }

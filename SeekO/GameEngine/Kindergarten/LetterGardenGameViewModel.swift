@@ -16,11 +16,16 @@ final class LetterGardenGameViewModel: ObservableObject {
         let character: Character
         let keyword: String
         let phoneme: String
+        let clueEmoji: String
 
         var uppercase: String { String(character) }
         var lowercase: String { uppercase.lowercased() }
         var displayDescription: String {
             "\(uppercase) as in \(keyword)"
+        }
+
+        var clueDescription: String {
+            "\(clueEmoji) \(keyword.capitalized)"
         }
     }
 
@@ -36,6 +41,7 @@ final class LetterGardenGameViewModel: ObservableObject {
     @Published private(set) var roundNumber: Int = 0
     @Published private(set) var score: Int = 0
     @Published private(set) var isComplete: Bool = false
+    @Published private(set) var promptClue: String?
 
     private let totalRounds = 6
     private var currentAnswer: LetterCard?
@@ -78,6 +84,7 @@ final class LetterGardenGameViewModel: ObservableObject {
         roundNumber = 0
         isComplete = false
         feedback = nil
+        promptClue = nil
         letterBag = Self.letterDeck.shuffled()
         prepareNextRound()
     }
@@ -112,6 +119,7 @@ final class LetterGardenGameViewModel: ObservableObject {
             helperText = "You matched \(score) letter sounds. Keep practicing every day!"
             currentAnswer = nil
             currentPromptLetter = nil
+            promptClue = nil
             speak(text: "Alphabet superstar! You matched \(score) letter sounds. Keep practicing every day!")
             return
         }
@@ -127,6 +135,7 @@ final class LetterGardenGameViewModel: ObservableObject {
         choices = pool.map { LetterCard(letter: $0) }.shuffled()
         currentAnswer = choices.first(where: { $0.letter == correctLetter })
         currentPromptLetter = correctLetter
+        promptClue = correctLetter.clueDescription
 
         if let answer = currentAnswer {
             promptText = "Which letter starts the word \(answer.letter.keyword.capitalized)?"
@@ -135,6 +144,7 @@ final class LetterGardenGameViewModel: ObservableObject {
         } else {
             promptText = "Tap the letter that matches the sound."
             helperText = "Listen carefully and choose the best match."
+            promptClue = nil
             speak(text: "Tap the matching letter. Listen to the sound and pick the correct letter.")
         }
     }
@@ -190,32 +200,32 @@ final class LetterGardenGameViewModel: ObservableObject {
 
 extension LetterGardenGameViewModel {
     static let letterDeck: [Letter] = [
-        Letter(character: "A", keyword: "apple", phoneme: "a"),
-        Letter(character: "B", keyword: "ball", phoneme: "b"),
-        Letter(character: "C", keyword: "cat", phoneme: "k"),
-        Letter(character: "D", keyword: "drum", phoneme: "d"),
-        Letter(character: "E", keyword: "elephant", phoneme: "e"),
-        Letter(character: "F", keyword: "fish", phoneme: "f"),
-        Letter(character: "G", keyword: "goat", phoneme: "g"),
-        Letter(character: "H", keyword: "hat", phoneme: "h"),
-        Letter(character: "I", keyword: "igloo", phoneme: "i"),
-        Letter(character: "J", keyword: "jam", phoneme: "j"),
-        Letter(character: "K", keyword: "kite", phoneme: "k"),
-        Letter(character: "L", keyword: "lion", phoneme: "l"),
-        Letter(character: "M", keyword: "moon", phoneme: "m"),
-        Letter(character: "N", keyword: "nest", phoneme: "n"),
-        Letter(character: "O", keyword: "octopus", phoneme: "o"),
-        Letter(character: "P", keyword: "pig", phoneme: "p"),
-        Letter(character: "Q", keyword: "queen", phoneme: "kw"),
-        Letter(character: "R", keyword: "rainbow", phoneme: "r"),
-        Letter(character: "S", keyword: "sun", phoneme: "s"),
-        Letter(character: "T", keyword: "turtle", phoneme: "t"),
-        Letter(character: "U", keyword: "umbrella", phoneme: "u"),
-        Letter(character: "V", keyword: "violin", phoneme: "v"),
-        Letter(character: "W", keyword: "whale", phoneme: "w"),
-        Letter(character: "X", keyword: "xylophone", phoneme: "z"),
-        Letter(character: "Y", keyword: "yarn", phoneme: "y"),
-        Letter(character: "Z", keyword: "zebra", phoneme: "z")
+        Letter(character: "A", keyword: "apple", phoneme: "a", clueEmoji: "🍎"),
+        Letter(character: "B", keyword: "ball", phoneme: "b", clueEmoji: "⚽️"),
+        Letter(character: "C", keyword: "cat", phoneme: "k", clueEmoji: "🐱"),
+        Letter(character: "D", keyword: "drum", phoneme: "d", clueEmoji: "🥁"),
+        Letter(character: "E", keyword: "elephant", phoneme: "e", clueEmoji: "🐘"),
+        Letter(character: "F", keyword: "fish", phoneme: "f", clueEmoji: "🐠"),
+        Letter(character: "G", keyword: "goat", phoneme: "g", clueEmoji: "🐐"),
+        Letter(character: "H", keyword: "hat", phoneme: "h", clueEmoji: "🎩"),
+        Letter(character: "I", keyword: "igloo", phoneme: "i", clueEmoji: "🏠"),
+        Letter(character: "J", keyword: "jam", phoneme: "j", clueEmoji: "🍓"),
+        Letter(character: "K", keyword: "kite", phoneme: "k", clueEmoji: "🪁"),
+        Letter(character: "L", keyword: "lion", phoneme: "l", clueEmoji: "🦁"),
+        Letter(character: "M", keyword: "moon", phoneme: "m", clueEmoji: "🌙"),
+        Letter(character: "N", keyword: "nest", phoneme: "n", clueEmoji: "🪺"),
+        Letter(character: "O", keyword: "octopus", phoneme: "o", clueEmoji: "🐙"),
+        Letter(character: "P", keyword: "pig", phoneme: "p", clueEmoji: "🐷"),
+        Letter(character: "Q", keyword: "queen", phoneme: "kw", clueEmoji: "👑"),
+        Letter(character: "R", keyword: "rainbow", phoneme: "r", clueEmoji: "🌈"),
+        Letter(character: "S", keyword: "sun", phoneme: "s", clueEmoji: "☀️"),
+        Letter(character: "T", keyword: "turtle", phoneme: "t", clueEmoji: "🐢"),
+        Letter(character: "U", keyword: "umbrella", phoneme: "u", clueEmoji: "☂️"),
+        Letter(character: "V", keyword: "violin", phoneme: "v", clueEmoji: "🎻"),
+        Letter(character: "W", keyword: "whale", phoneme: "w", clueEmoji: "🐳"),
+        Letter(character: "X", keyword: "xylophone", phoneme: "z", clueEmoji: "🎶"),
+        Letter(character: "Y", keyword: "yarn", phoneme: "y", clueEmoji: "🧶"),
+        Letter(character: "Z", keyword: "zebra", phoneme: "z", clueEmoji: "🦓")
     ]
 }
 
